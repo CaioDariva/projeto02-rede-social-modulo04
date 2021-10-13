@@ -1,4 +1,4 @@
-import { Prisma, Tweet } from '.prisma/client';
+import { Tweet } from '.prisma/client';
 import {
   Injectable,
   NotFoundException,
