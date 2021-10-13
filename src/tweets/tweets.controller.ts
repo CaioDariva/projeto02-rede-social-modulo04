@@ -1,4 +1,4 @@
-import { Tweet } from '.prisma/client';
+import { Tweet, User } from '.prisma/client';
 import {
   Body,
   Controller,
@@ -7,9 +7,11 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 import { CreateTweetDto } from './dto/tweets.dto';
 import { TweetsService } from './tweets.service';
 
@@ -25,8 +27,10 @@ export class TweetsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post('create')
-  create(@Body() data: CreateTweetDto): Promise<Tweet> {
-    return this.service.create(data);
+  create(@Body() data: CreateTweetDto, @Req() req: Request): Promise<Tweet> {
+    const user = req.user as User;
+    const idUser = user.id;
+    return this.service.create(data, idUser);
   }
 
   @UseGuards(AuthGuard('jwt'))

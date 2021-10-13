@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateTweetDto } from './dto/tweets.dto';
 
 @Injectable()
 export class TweetsService {
@@ -27,9 +28,12 @@ export class TweetsService {
     return tweet;
   }
 
-  async create(data: Prisma.TweetCreateInput): Promise<Tweet> {
+  async create(data: CreateTweetDto, idUser: number): Promise<Tweet> {
     const tweet = await this.db.tweet.create({
-      data,
+      data: {
+        ...data,
+        userId: idUser,
+      },
     });
 
     return tweet;
